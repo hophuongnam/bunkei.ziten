@@ -1,0 +1,77 @@
+<!doctype html>
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+
+    <title>文型辞書</title>
+    
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="wanakana.min.js"></script>
+    <script type="text/javascript" src="xStore.min.js"></script>
+    <script type="text/javascript" src="delayed.min.js"></script>
+    <script type="text/javascript" src="jquery.mutationobserver.min.js"></script>
+    <script type="text/javascript" src="underscore.min.js"></script>
+    <script type="text/javascript" src="FontLoader.min.js"></script>
+    <script type="text/javascript" src="vagueTime.min.js"></script>
+    <script type="text/javascript" src="jquery.modal.min.js"></script>
+    <script type="text/javascript" src="pouchdb.min.js"></script>
+    <script type="text/javascript" src="jquery.blink.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
+    <script type="text/javascript" src="bunkei.ziten.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="normalize.css">
+    <link rel="stylesheet" type="text/css" href="jquery.modal.min.css">
+    <!--<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">-->
+    <link rel="stylesheet" type="text/css" href="bunkei.ziten.css">
+</head>
+<body>
+    <div id=topBar>
+        <div id=title>日本語文型辞典</div>
+        <div id=history>
+            <i class="fas fa-star" id=newUpdate style="color: Tomato;"></i>
+            <a class=myButton id=random><i class="fas fa-random"></i></a>
+            <a class=myButton id=back data-disabled="true"><i class="fas fa-chevron-left"></i></a>
+            <a class=myButton id=forward data-disabled="true"><i class="fas fa-chevron-right"></i></a>
+            <a class=myButton id=language><span style="font-family: monospace;">JP</span></a>
+            <a class=myButton id=help><i class="fas fa-question"></i></a>
+        </div>
+    </div>
+
+    <div id=sideBar class=transition>
+        <div id=searchBar>
+            <input autocapitalize="none" autocorrect="none" autocomplete="off" id=search type=text placeholder="検索">
+        </div>
+
+        <div id=toc></div>
+        <div id=tocFooter></div>
+    </div>
+    
+    <div id=main>
+        <div id=mainContent></div>
+    </div>
+    
+    <div class="fa-lg spinner">
+        <i class="far fa-sun fa-spin"></i>
+    </div>
+
+    <div id=pouchdb style="display: none;">
+        <p>Please enter RemoteDB detail</p>
+        <p><input id=pouchdbConfig type="text"></p>
+        <button id=pouchdbButton>Done</button>
+    </div>
+
+    <div id=trans style="display: none; font-size: 0.7em; line-height: 1.5;"></div>
+    <div id=helpBox style="display: none; font-size: 0.7em; line-height: 1.5;"></div>
+
+    <div id=langBar class=transition style="padding: 10px;">
+        <input type="radio" id="langJP" name="rr" value="jp" />
+        <label for="langJP">日本語</label>
+        <br>        
+        <input type="radio" id="langVI" name="rr" value="vi" />
+        <label for="langVI">Tiếng Việt</label>
+    </div>
+</body>
+</html>
