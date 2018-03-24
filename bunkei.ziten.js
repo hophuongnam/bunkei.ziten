@@ -143,7 +143,7 @@ function updateMainContent(item) {
 
     while (match = pt.exec(newContent)) {
         var a
-        if (match[0].length > 6) {
+        if (match[0].length > 5) {
             a = toHalfWidth(match[0].replace("＃", "").replace("＆", "").replace("　", " "));
         } else {
             if (CSS.supports("text-combine-upright", "all")) {
