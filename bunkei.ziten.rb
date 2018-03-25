@@ -175,19 +175,19 @@ def convertFile (f, tocDict, dict)
     #
     # Move content to data attributes
     #
-    doc.xpath("//*[@class='vi']").each { |r|
-        r['data-vi'] = r.content
-        r.content = ''
-        r.name = 'img'
-        r['src'] = 'comment.svg'
-    }
+    #doc.xpath("//*[@class='vi']").each { |r|
+    #    r['data-vi'] = r.content
+    #    r.content = ''
+    #    r.name = 'img'
+    #    r['src'] = 'comment.svg'
+    #}
 
-    doc.xpath("//*[@class='en']").each { |r|
-        r['data-en'] = r.content
-        r.content = ''
-        r.name = 'img'
-        r['src'] = 'comment.svg'
-    }
+    #doc.xpath("//*[@class='en']").each { |r|
+    #    r['data-en'] = r.content
+    #    r.content = ''
+    #    r.name = 'img'
+    #    r['src'] = 'comment.svg'
+    #}
 
     #
     # Split Examples into Sentences
@@ -343,8 +343,7 @@ def convertFile (f, tocDict, dict)
     #
     doc.xpath("//*[@class='sentenceContent']").each do |s|
         if s.content.include? "|"
-            a = s.content.split("|")
-            # s.previous = "<span class=sentenceContent>#{a[0]}<img class=vi src='comment.svg' data-vi='#{a[1].strip}'></span>"
+            a = s.content.split("|")            
             s.previous = "<span class=sentenceContent>#{a[0]}<img class=vi src='#{commentSVG}' data-vi='#{a[1].strip}'></span>"
             s.remove
         end
@@ -353,7 +352,6 @@ def convertFile (f, tocDict, dict)
     doc.xpath("//*[@class='explains']").each do |s|
         if s.content.include? "|"
             a = s.content.split("|")
-            # s.previous = "<div class=explains>#{a[0]}<img class=vi src='comment.svg' data-vi='#{a[1].strip}'></div>"
             s.previous = "<div class=explains>#{a[0]}<img class=vi src='#{commentSVG}' data-vi='#{a[1].strip}'></div>"
             s.remove
         end
@@ -362,7 +360,6 @@ def convertFile (f, tocDict, dict)
     doc.xpath("//*[@class='border']").each do |s|
         if s.content.include? "|"
             a = s.content.split("|")
-            # s.previous = "<div class=border><span>#{a[0]}</span><img class=vi src='comment.svg' data-vi='#{a[1].strip}'></div>"
             s.previous = "<div class=border><span>#{a[0]}</span><img class=vi src='#{commentSVG}' data-vi='#{a[1].strip}'></div>"
         else
             s.previous = "<div class=border><span>#{s.content}</span></div>"

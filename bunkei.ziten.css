@@ -40,6 +40,15 @@ rt {
     visibility: hidden;
     letter-spacing: 0px;
     font-size: 40%;
+
+    /*color: rgb(165, 42, 42);
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    background-color: rgb(255, 250, 205);
+    border-top-left-radius: 0.2em;
+    border-top-right-radius: 0.2em;
+    border-bottom-right-radius: 0.2em;
+    border-bottom-left-radius: 0.2em;*/
 }
 
 sub {
@@ -225,6 +234,9 @@ input::placeholder {
     -moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
     color: rgb(165, 42, 42);*/
+    background-color: inherit;
+    border-radius: inherit;
+    color: inherit;
 }
 
 /*.keyword {
@@ -248,6 +260,19 @@ input::placeholder {
 }
 
 .border span {
+    -webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    background-color: #f0f0f0;
+    border-top-left-radius: 0.2em;
+    border-top-right-radius: 0.2em;
+    border-bottom-right-radius: 0.2em;
+    border-bottom-left-radius: 0.2em;
+    padding: 0.2em;
+}
+
+.border rt {
+    background-color: #f0f0f0;
     -webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
     -moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
