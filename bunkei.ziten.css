@@ -241,8 +241,7 @@ input::placeholder {
 }
 
 .border {
-    margin-left: 0.5em;
-    margin-right: 1em;
+    margin: 0 1em;
     /*position: sticky;
     position: -webkit-sticky;*/
     right: 0;
@@ -262,16 +261,17 @@ input::placeholder {
 
 .explains {
     text-indent: 2em;
-    margin-right: 0.5em;
-    margin-left: 0.5em;
+    margin: 0 1em;
 }
 
 .examples {
     font-family: Tahoma, Arial, Helvetica, Verdana, Geneva, CustomMincho, 'ヒラギノ明朝 ProN', 'Hiragino Mincho ProN', '游明朝', '游明朝体', 'Yu Mincho', 'ＭＳ 明朝', 'MS Mincho', HiraMinProN-W3, 'TakaoEx明朝', TakaoExMincho, 'MotoyaLCedar', 'Droid Sans Japanese', sans-serif;
+    margin: 0 1em;
 }
 
 .sentence {
     display: table;
+    margin: 0 0.5em;
 }
 
 .sentenceHeader, .sentenceContent {
