@@ -13,7 +13,7 @@ do
     ruby bunkei.ziten.rb
 
 
-    rm *docx.xml
+    # rm *docx.xml
     sleep 5
 
 
