@@ -155,7 +155,7 @@ input::placeholder {
     display: list-item;
     color: #777;
     padding: 10px;
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
 
 #toc a:hover {
@@ -224,34 +224,15 @@ input::placeholder {
     color: rgb(165, 42, 42);
     padding: 0.2em 0;
     font-family: Tahoma, Arial, Helvetica, Verdana, Geneva, 'CustomMincho', 'ヒラギノ明朝 ProN', 'Hiragino Mincho ProN', '游明朝', '游明朝体', 'Yu Mincho', 'ＭＳ 明朝', 'MS Mincho', 'HiraMinProN-W3', 'TakaoEx明朝', 'TakaoExMincho', 'MotoyaLCedar', 'Droid Sans Japanese', sans-serif;
-    /*text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);*/
 }
 
 .heading rt {
     visibility: visible;
     text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);
-    /*background-color: rgb(255, 250, 205);
-    border-top-left-radius: 0.2em;
-    border-top-right-radius: 0.2em;
-    border-bottom-right-radius: 0.2em;
-    border-bottom-left-radius: 0.2em;
-    -webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
-    color: rgb(165, 42, 42);*/
     background-color: inherit;
     border-radius: inherit;
     color: inherit;
 }
-
-/*.keyword {
-    display: inline-block;
-    margin-left: 0.5em;
-}
-
-.heading .keyword {
-    display: inline;
-}*/
 
 .item {
     margin-left: 1em;
@@ -259,8 +240,6 @@ input::placeholder {
 
 .border {
     margin: 0 1em;
-    /*position: sticky;
-    position: -webkit-sticky;*/
     right: 0;
 }
 

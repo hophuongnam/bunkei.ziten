@@ -22,7 +22,7 @@ var minchoReady = false;
 var gothicReady = false;
 var textReady = false;
 var containerMonitor;
-var monitorsTOC = [];
+// var monitorsTOC = [];
 var timeChecked;
 
 var touch = 'ontouchstart' in document.documentElement
@@ -77,7 +77,7 @@ function displayTOC(tocToDisplay) {
         $('#toc').html("");
         $("#toc").append(tocA);        
 
-        monitorsTOC.forEach(function(element) {
+        /*monitorsTOC.forEach(function(element) {
             element.destroy();
         });
         monitorsTOC = [];
@@ -93,7 +93,7 @@ function displayTOC(tocToDisplay) {
             });
 
             monitorsTOC.push(watcher);
-        });
+        });*/
     }
 }
 
@@ -254,19 +254,7 @@ function dataReady() {
         return
     }
 
-    /*if (isiOS) {
-        $(window).resize(function() {
-            // Fix zoom bug on iOS
-            $('#mainContent').css('height', document.documentElement.clientHeight - 120);
-        });
-        $(".border").css("position", "initial");
-    }*/
-
     if (isFirefox) {
-        /*$("#mainContent").css({
-            "overflow": "auto",
-            "height": "calc(100% - 100px)"
-        });*/
         sitvff = "start"; /* scrollIntoView */
     }
 
@@ -277,7 +265,7 @@ function dataReady() {
         document.body.appendChild(sheet);
     }
 
-    containerMonitor = scrollMonitor.createContainer( $("#toc") );
+    // containerMonitor = scrollMonitor.createContainer( $("#toc") );
 
     language = store.get("language", "jp");
     switch(language) {
