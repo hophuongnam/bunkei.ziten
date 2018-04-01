@@ -1,6 +1,7 @@
 require 'nokogiri'
 require 'fullwidth'
 require 'json'
+# require "uuidtools"
 # require 'couchrest'
 
 def mergeAdjiacent (doc, clName)
@@ -336,6 +337,7 @@ def convertFile (f, tocDict, dict)
     doc.xpath("//div[@class='heading']").each {|s|
         s.remove_attribute "rsidP"
         s['id'] = s['paraId']
+        # s['id'] = UUIDTools::UUID.md5_create(UUIDTools::UUID_DNS_NAMESPACE, s.text)
         s.remove_attribute "paraId"
     }
 
@@ -372,9 +374,13 @@ def convertFile (f, tocDict, dict)
         keyword = d.xpath("span[@class='keyword']").text
         h = {
             "keyword" => keyword.to_fullwidth,
-            "type" => "kana",
             "id" => d['id']
         }
+        # h = {
+        #    "keyword" => "<span class=tocItem>#{keyword.to_fullwidth}</span>",
+        #    "type" => "kana",
+        #    "id" => d['id']
+        # }
         tocDict << h
 
         # keyword = d.xpath("span[@class='kanji']").text
@@ -446,9 +452,9 @@ dict['version'] = version
 #
 # Write to file
 #
-File.open("../time4vps.html/bunkei.ziten.version.js", "w") {|f| f.write "version = #{version};"}
-File.open("../time4vps.html/toc.json", "w") {|f| f.write tocDict.to_json}
-File.open("../time4vps.html/dict.json", "w") {|f| f.write dict.to_json}
+File.open("/Data/time4vps.html/bunkei.ziten.version.js", "w") {|f| f.write "version = #{version};"}
+File.open("/Data/time4vps.html/toc.json", "w") {|f| f.write tocDict.to_json}
+File.open("/Data/time4vps.html/dict.json", "w") {|f| f.write dict.to_json}
 
 =begin
 begin

@@ -95,7 +95,7 @@ digit {
     color: #777;
 }
 
-#forward, #back {
+#history-forward, #history-backward {
     color: #ccc;
 }
 
@@ -387,7 +387,7 @@ input::placeholder {
     visibility: hidden;
 }
 
-#stickyPanel {
+#stickyPanel, .currentTocItem {
     background-color: rgb(255, 250, 205);
     border-top-left-radius: 0.2em;
     border-top-right-radius: 0.2em;

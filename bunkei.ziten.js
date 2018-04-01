@@ -68,13 +68,12 @@ function displayTOC(tocToDisplay) {
 
         var tocA = ""
         jQuery.each(tocToDisplay, function(index, value) {
-            if (value.type == "kana") {
-                // tocA = tocA + "<a id=" + value.id + ">" + value.keyword + "</a>"
+        	tocA += `<a id=${value.id}>${value.keyword}</a>`;
+            /*if (value.type == "kana") {
                 tocA += `<a id=${value.id}>${value.keyword}</a>`
             } else {
-                // tocA = tocA + "<a class=tocKanji id=" + value.id + ">" + value.keyword + "</a>"
                 tocA += `<a class=tocKanji id=${value.id}>${value.keyword}</a>`
-            }
+            }*/
         })        
         $('#toc').html("");
         $("#toc").append(tocA);        
@@ -162,39 +161,39 @@ function updateMainContent(item) {
     $.each(m, function(index, value) {
         keyword = value.slice(1, -1);
         hasKey = _.find(toc, function(value) {
-            return value.keyword ==  keyword
+            return value.keyword == keyword
         })
         if (hasKey) {
             re = new RegExp(value, "g");
-            // newContent = newContent.replace(re, "<a id=" + hasKey.id + ">" + value + "</a>")
-            newContent = newContent.replace(re, `<a id=${hasKey.id}>${value}</a>`);
+            newContent = newContent.replace(re, `<a data-target=${hasKey.id}>${value}</a>`);
         }
     });
     $('#mainContent').append(newContent);
 }
 
 function displayNewContent(heading) {
+    if (currentHeading && currentHeading == heading) { return }
+
     $("#mainContent").css("visibility", "hidden");
     $("#spinnerContainer").show();
 
-    if (currentHeading) {backward.push(currentHeading)}
-    if (backward.length > 0) {
-        $('#back').css('color', '#666666');
-        $('#back').data("disabled", "false");
+    if (currentHeading) {
+        backward.push(currentHeading);
+        if ( backward.length > 99) {
+            backward.shift();
+        }
+        $("#history-backward").data("disabled", 0);
+        $('#history-backward').css('color', '#666666');
     }
-    if (forward.length > 0) {
-        $('#forward').css('color', '#666666');
-        $('#forward').data("disabled", "false");
-    }
-    if (backward.length > 99) {backward.shift();}
+
     currentHeading = heading;
 
-    updateMainContent(heading);
+    updateMainContent(currentHeading);
 
-    store.set('currentHeading', heading);
+    store.set('currentHeading', currentHeading);
     store.set('history', backward);
+    store.set('scroll', 0);
     $(window).scrollLeft(0);
-    store.set( 'scroll', $(window).scrollLeft() );
 }
 
 async function getData(filename, same) {
@@ -249,6 +248,7 @@ function closeSideBar() {
     if ( $("#sideBar").hasClass("open") ) {
         $("#sideBar").removeClass("open");
         $("#pullout").removeClass("open");
+        $(`#${currentHeading}`).removeClass('currentTocItem');
     }
 }
 
@@ -285,54 +285,50 @@ function dataReady() {
     }
     store.set("language", language);
 
+    $('#history-forward').data("disabled", 1);
+    $('#history-backward').data("disabled", 1);
+
     backward = store.get("history", []);
     if (backward.length > 0) {
-        $('#back').css('color', '#666666');
-        $('#back').data("disabled", "false");
+        $('#history-backward').css('color', '#666666');
+        $('#history-backward').data("disabled", 0);
     }
 
-    //if ( !isiOS) {
-        setInterval(function() {
-            if ( !$("#sideBar").hasClass("open") ) {
-                displayTOC(toc);
-            }
-        }, 1000);
-    //}
-
-    $.getScript('bunkei.ziten.version.js', function() {
-        delayed.delay(function() {
-            timeChecked = new Date().toLocaleString();
-            if (version != dict.version) {
-                Promise.all([getData('toc.json', false), getData('dict.json', false)]).then(
-                    (values) => {
-                        toc  = values[0];
-                        dict = values[1];
-                        updateMainContent(currentHeading);
-                        $(window).scrollLeft(store.get('scroll'));
-                    }
-                );
-            }
-        }, 1000);
+    $("#random").click(() => {
+        var ran = pickRandomProperty(dict);
+        if (ran == "version") { return }
+        displayNewContent(ran);
+        closeSideBar();
     });
 
-    setInterval(() => {
-        $.getScript('bunkei.ziten.version.js', function() {
-            timeChecked = new Date().toLocaleString();
-            if (version != dict.version) {
-                Promise.all([getData('toc.json', false), getData('dict.json', false)]).then(
-                    (values) => {
-                        toc  = values[0];
-                        dict = values[1];
-                        updateMainContent(currentHeading);
-                        $(window).scrollLeft(store.get('scroll'));
-                    }
-                );
-            }
-        });
-    }, 300000);
+    $("#history-forward").click(() => {
+        if ( $('#history-forward').data("disabled") ) { return }
+
+        displayNewContent(forward.pop());
+        closeSideBar();
+        if (forward.length == 0) {
+            $('#history-forward').css('color', '#ccc');
+            $('#history-forward').data("disabled", 1);
+        }
+    });
+
+    $("#history-backward").click(() => {
+        if ( $("#history-backward").data("disabled") ) { return }
+
+        displayNewContent( backward.pop() );
+        closeSideBar();
+        forward.push( backward.pop() );        
+        store.set('history', backward);
+        if (backward.length == 0) {
+            $('#history-backward').css('color', '#ccc');
+            $('#history-backward').data("disabled", 1);
+        }
+        $('#history-forward').css('color', '#666666');
+        $('#history-forward').data("disabled", 0);
+    });
 
     currentHeading = store.get('currentHeading');
-    if (!currentHeading) {
+    if ( !currentHeading ) {
         ran = pickRandomProperty(dict);
         displayNewContent(ran);
     } else {
@@ -345,7 +341,8 @@ function dataReady() {
         if ( !$("#sideBar").hasClass("open") ) {
             $("#search").val("");
             displayTOC(toc);
-            $("#" + currentHeading)[0].scrollIntoView({block: sitvff});
+            $(`#${currentHeading}`).addClass('currentTocItem');
+            $(`#${currentHeading}`)[0].scrollIntoView({block: sitvff});
         }
         $("#sideBar").toggleClass("open");
         $("#pullout").toggleClass("open");
@@ -356,70 +353,6 @@ function dataReady() {
     $("#search").on("input", () => {
         clearTimeout(typingTimer);
         typingTimer = setTimeout(doneTyping, doneTypingInterval);
-    });
-
-    $(window).scroll(() => {
-        scrolling = true;
-    });
-
-    setInterval(() => {
-        if (scrolling) {
-            scrolling = false;
-            store.set('scroll', $(window).scrollLeft());
-
-            if (isAndroid && isChrome) {
-                $("#titleSentinel").trigger("scrolling");
-            }
-
-            /*$(".sentinel").trigger({
-                type: "scrolling",
-                windowBoundRight: $(window).scrollLeft() + document.documentElement.clientWidth
-            });*/
-        }
-    }, 100);
-
-    $("#random").click(() => {
-        ran = pickRandomProperty(dict);
-        displayNewContent(ran);
-        if ( $("#sideBar").css('left') == "0px" ) {
-            $("#search").val("");
-            displayTOC(toc);
-            $("#" + currentHeading)[0].scrollIntoView({block: sitvff});
-        }
-    });
-
-    $("#forward").click(() => {
-        if ($('#forward').data("disabled") == "true") { return }
-        displayNewContent(forward.pop());
-        if ( $("#sideBar").css('left') == "0px" ) {
-            $("#search").val("");
-            displayTOC(toc);
-            $("#" + currentHeading)[0].scrollIntoView({block: sitvff});
-        }
-        if (forward.length == 0) {
-            $('#forward').css('color', '#ccc');
-            $('#forward').data("disabled", "true");
-        }
-    });
-
-    $("#back").click(() => {
-        if ($('#back').data("disabled") == "true") { return }
-        displayNewContent(backward.pop());
-        if ( $("#sideBar").css('left') == "0px" ) {
-            $("#search").val("");
-            displayTOC(toc);
-            $("#" + currentHeading)[0].scrollIntoView({block: sitvff});
-        }
-        forward.push(backward.pop());
-        store.set('history', backward);
-        if (backward.length == 0) {
-            $('#back').css('color', '#ccc');
-            $('#back').data("disabled", "true");
-        }
-        if (forward.length > 0) {
-            $('#forward').css('color', '#666666');
-            $('#forward').data("disabled", "false");
-        }
     });
 
     $("#language").click(function() {
@@ -524,7 +457,7 @@ function dataReady() {
         $('#mainContent a').click(function(e) {
             e.preventDefault();
             closeSideBar();
-            heading = $(this).attr('id');
+            heading = $(this).data('target');
             displayNewContent(heading);
         });
 
@@ -555,6 +488,64 @@ function dataReady() {
     $("#spinnerContainer").css("top", "51px");
     $("#spinnerContainer").css("z-index", "2");
     $("#mainContent").css("visibility", "visible");
+
+    $(window).scroll(() => {
+        scrolling = true;
+    });
+
+    setInterval(() => {
+        if (scrolling) {
+            scrolling = false;
+            store.set('scroll', $(window).scrollLeft());
+
+            if (isAndroid && isChrome) {
+                $("#titleSentinel").trigger("scrolling");
+            }
+
+            /*$(".sentinel").trigger({
+                type: "scrolling",
+                windowBoundRight: $(window).scrollLeft() + document.documentElement.clientWidth
+            });*/
+        }
+    }, 100);
+
+    setInterval(function() {
+        if ( !$("#sideBar").hasClass("open") ) {
+            displayTOC(toc);
+        }
+    }, 1000);
+
+    setInterval(() => {
+        $.getScript('bunkei.ziten.version.js', function() {
+            timeChecked = new Date().toLocaleString();
+            if (version != dict.version) {
+                Promise.all([getData('toc.json', false), getData('dict.json', false)]).then(
+                    (values) => {
+                        toc  = values[0];
+                        dict = values[1];
+                        updateMainContent(currentHeading);
+                        $(window).scrollLeft(store.get('scroll'));
+                    }
+                );
+            }
+        });
+    }, 300000);
+
+    $.getScript('bunkei.ziten.version.js', function() {
+        delayed.delay(function() {
+            timeChecked = new Date().toLocaleString();
+            if (version != dict.version) {
+                Promise.all([getData('toc.json', false), getData('dict.json', false)]).then(
+                    (values) => {
+                        toc  = values[0];
+                        dict = values[1];
+                        updateMainContent(currentHeading);
+                        $(window).scrollLeft(store.get('scroll'));
+                    }
+                );
+            }
+        }, 1000);
+    });
 }
 
 $( document ).ready(() => {
