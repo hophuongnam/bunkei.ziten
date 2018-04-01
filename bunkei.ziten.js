@@ -69,9 +69,11 @@ function displayTOC(tocToDisplay) {
         var tocA = ""
         jQuery.each(tocToDisplay, function(index, value) {
             if (value.type == "kana") {
-                tocA = tocA + "<a id=" + value.id + ">" + value.keyword + "</a>"
+                // tocA = tocA + "<a id=" + value.id + ">" + value.keyword + "</a>"
+                tocA += `<a id=${value.id}>${value.keyword}</a>`
             } else {
-                tocA = tocA + "<a class=tocKanji id=" + value.id + ">" + value.keyword + "</a>"
+                // tocA = tocA + "<a class=tocKanji id=" + value.id + ">" + value.keyword + "</a>"
+                tocA += `<a class=tocKanji id=${value.id}>${value.keyword}</a>`
             }
         })        
         $('#toc').html("");
@@ -164,7 +166,8 @@ function updateMainContent(item) {
         })
         if (hasKey) {
             re = new RegExp(value, "g");
-            newContent = newContent.replace(re, "<a id=" + hasKey.id + ">" + value + "</a>")
+            // newContent = newContent.replace(re, "<a id=" + hasKey.id + ">" + value + "</a>")
+            newContent = newContent.replace(re, `<a id=${hasKey.id}>${value}</a>`);
         }
     });
     $('#mainContent').append(newContent);
@@ -338,8 +341,7 @@ function dataReady() {
     }
 
     $("#pullout").click(() => {
-        // $("#tocFooter").text("Last updated " + vagueTime.get({to: dict.version * 1000, from: Date.now()}) + ".");
-        $("#tocFooter").html("Last updated " + vagueTime.get({to: dict.version * 1000, from: Date.now()}) + "." + "<br>" + "Last checked at " + timeChecked + ".");
+        $("#tocFooter").html(`Last updated ${vagueTime.get({to: dict.version * 1000, from: Date.now()})}.<br>Last checked at ${timeChecked}.`);
         if ( !$("#sideBar").hasClass("open") ) {
             $("#search").val("");
             displayTOC(toc);
@@ -463,7 +465,8 @@ function dataReady() {
         var str = $("div.heading span.keyword").text();
         var m = str.match(/[１２３４５]/);
         if (m) {
-            str = str.replace(m, "<sub>" + m + "</sub>");
+            // str = str.replace(m, "<sub>" + m + "</sub>");
+            str = str.replace(m, `<sub>${m}</sub>`);
             $("div.heading span.keyword").html(str);
         }
 
@@ -582,7 +585,8 @@ $( document ).ready(() => {
                             getData('mincho.json', true).then(
                                 function(value) {
                                     var sheetMincho = document.createElement('style');
-                                    sheetMincho.innerHTML = "@font-face{font-family:CustomMincho;src:url(data:font/ttf;base64," + value.mincho + ")}";
+                                    // sheetMincho.innerHTML = "@font-face{font-family:CustomMincho;src:url(data:font/ttf;base64," + value.mincho + ")}";
+                                    sheetMincho.innerHTML = `@font-face{font-family:CustomMincho;src:url(data:font/ttf;base64,${value.mincho})}`;
                                     document.body.appendChild(sheetMincho);
                                     fontLoader = new FontLoader(["CustomMincho"], {
                                         "complete": () => {
@@ -597,7 +601,7 @@ $( document ).ready(() => {
                             getData('mincho.json', true).then(
                                 function(value) {
                                     var sheetMincho = document.createElement('style');
-                                    sheetMincho.innerHTML = "@font-face{font-family:CustomMincho;src:url(data:font/ttf;base64," + value.mincho + ")}";
+                                    sheetMincho.innerHTML = `@font-face{font-family:CustomMincho;src:url(data:font/ttf;base64,${value.mincho})}`;
                                     document.body.appendChild(sheetMincho);
                                 }
                             )
@@ -620,7 +624,8 @@ $( document ).ready(() => {
                             getData('gothic.json', true).then(
                                 function(value) {
                                     var sheetGothic = document.createElement('style');
-                                    sheetGothic.innerHTML = "@font-face{font-family:CustomGothic;src:url(data:font/ttf;base64," + value.gothic + ")}";
+                                    // sheetGothic.innerHTML = "@font-face{font-family:CustomGothic;src:url(data:font/ttf;base64," + value.gothic + ")}";
+                                    sheetGothic.innerHTML = `@font-face{font-family:CustomGothic;src:url(data:font/ttf;base64,${value.gothic})}`;
                                     document.body.appendChild(sheetGothic);
                                     fontLoader = new FontLoader(["CustomGothic"], {
                                         "complete": () => {
@@ -635,7 +640,7 @@ $( document ).ready(() => {
                             getData('gothic.json', true).then(
                                 function(value) {
                                     var sheetGothic = document.createElement('style');
-                                    sheetGothic.innerHTML = "@font-face{font-family:CustomGothic;src:url(data:font/ttf;base64," + value.gothic + ")}";
+                                    sheetGothic.innerHTML = `@font-face{font-family:CustomGothic;src:url(data:font/ttf;base64,${value.gothic})}`;
                                     document.body.appendChild(sheetGothic);
                                 }
                             )
