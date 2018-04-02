@@ -138,19 +138,20 @@ function hideRT(rt) {
 */
 function updateMainContent(item) {
     $('#mainContent').html("");
-    var newContent = dict[item].replace(/＄/g, '<br>').replace(/\$/g, '<br>').replace(/Þ/g, '<strong>').replace(/ø/g, '</strong>');
-    var pt = /＃.+?＆/g;
+    var newContent = dict[item].replace(/＄/g, '<br>').replace(/\$/g, '<br>').replace(/β/g, '<strong>').replace(/θ/g, '</strong>').replace(/μλ/g, "");
+    // var pt = /＃.+?＆/g;
+    var pt = /λ.+?μ/g;
     var match;
 
     while (match = pt.exec(newContent)) {
         var a
         if (match[0].length > 5) {
-            a = toHalfWidth( match[0].replace("＃", "").replace("＆", "").replace(/\u3000/g, " ") );
+            a = toHalfWidth( match[0].replace("λ", "").replace("μ", "").replace(/\u3000/g, " ") );
         } else {
             if ( CSS.supports("text-combine-upright", "all") ) {
-                a = toHalfWidth( match[0].replace("＃", "<digit>").replace("＆", "</digit>") );
+                a = toHalfWidth( match[0].replace("λ", "<digit>").replace("μ", "</digit>") );
             } else {
-                a = match[0].replace("＃", "").replace("＆", "");
+                a = match[0].replace("λ", "").replace("μ", "");
             }
             
         }

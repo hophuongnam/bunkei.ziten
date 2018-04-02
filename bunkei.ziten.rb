@@ -17,12 +17,24 @@ def mergeAdjiacent (doc, clName)
                 # γ = <rt>
                 # δ = </rt></ruby>
                 # <ruby> KANJI <rt> KANA </rt></ruby>
-                content += "α#{ruby}γ#{furi}δ"
+                # content += "α#{ruby}γ#{furi}δ"
+
+                if i.xpath("./rPr[u[@val='thick']]").empty?
+                    content += "α#{ruby}γ#{furi}δ"
+                else
+                    content += "βα#{ruby}γ#{furi}δθ"
+                end
             rescue
                 puts i
             end
         else
-            content += i.content
+            # content += i.content
+            if i.xpath("./rPr[u[@val='thick']]").empty? and i.xpath("./rPr[u[@val='dotted']]").empty?
+                content += i.content
+            else
+                content += "β#{i.content}θ" unless i.xpath("./rPr[u[@val='thick']]").empty?
+                content += "λ#{i.content}μ" unless i.xpath("./rPr[u[@val='dotted']]").empty?                
+            end
         end
         elementToRemoved.push i
         if i.next_element.nil? or i.next_element['class'] != "#{clName}"
@@ -436,6 +448,7 @@ tocDict = []
 dict = {}
 
 convertFile "bunkei.ziten.aiueo.docx.xml",       tocDict, dict
+
 convertFile "bunkei.ziten.kakikukeko.docx.xml",  tocDict, dict
 convertFile "bunkei.ziten.sashisuseso.docx.xml", tocDict, dict
 convertFile "bunkei.ziten.tachitsu.docx.xml",    tocDict, dict
@@ -446,6 +459,7 @@ convertFile "bunkei.ziten.ninuneno.docx.xml",    tocDict, dict
 convertFile "bunkei.ziten.hahifuheho.docx.xml",  tocDict, dict
 convertFile "bunkei.ziten.mamimumemo.docx.xml",  tocDict, dict
 convertFile "bunkei.ziten.last.docx.xml",        tocDict, dict
+
 version = Time.now.to_i
 dict['version'] = version
 
