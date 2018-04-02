@@ -145,10 +145,10 @@ function updateMainContent(item) {
     while (match = pt.exec(newContent)) {
         var a
         if (match[0].length > 5) {
-            a = toHalfWidth(match[0].replace("＃", "").replace("＆", "").replace("　", " "));
+            a = toHalfWidth( match[0].replace("＃", "").replace("＆", "").replace(/\u3000/g, " ") );
         } else {
-            if (CSS.supports("text-combine-upright", "all")) {
-                a = toHalfWidth(match[0].replace("＃", "<digit>").replace("＆", "</digit>").replace("　", " "));
+            if ( CSS.supports("text-combine-upright", "all") ) {
+                a = toHalfWidth( match[0].replace("＃", "<digit>").replace("＆", "</digit>") );
             } else {
                 a = match[0].replace("＃", "").replace("＆", "");
             }
