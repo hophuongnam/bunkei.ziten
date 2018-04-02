@@ -138,7 +138,7 @@ function hideRT(rt) {
 */
 function updateMainContent(item) {
     $('#mainContent').html("");
-    var newContent = dict[item].replace(/＄/g, '<br>').replace(/\$/g, '<br>');
+    var newContent = dict[item].replace(/＄/g, '<br>').replace(/\$/g, '<br>').replace(/Þ/g, '<strong>').replace(/ø/g, '</strong>');
     var pt = /＃.+?＆/g;
     var match;
 
