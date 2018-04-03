@@ -138,7 +138,7 @@ function hideRT(rt) {
 */
 function updateMainContent(item) {
     $('#mainContent').html("");
-    var newContent = dict[item].replace(/＄/g, '<br>').replace(/\$/g, '<br>').replace(/θβ/g, "").replace(/μλ/g, "").replace(/β/g, '<strong>').replace(/θ/g, '</strong>');
+    var newContent = dict[item].replace(/＄/g, '<br>').replace(/\$/g, '<br>').replace(/θβ/g, "").replace(/μλ/g, "").replace(/β/g, '<str>').replace(/θ/g, '</str>');
     // var pt = /＃.+?＆/g;
     var pt = /λ.+?μ/g;
     var match;
