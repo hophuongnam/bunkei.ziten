@@ -9,6 +9,14 @@ def mergeAdjiacent (doc, clName)
     content = ""
     elementToRemoved = []
     items.each do |i|
+        if i['comment'] == "true"
+            commentID = i.at_xpath("./commentReference")['id']
+            puts "I am a comment."
+            puts "My ID is '#{commentID}'."
+            puts "My class is '#{i['class']}'."
+            puts "My content is '#{i.content}'."
+        end
+
         unless i.xpath("./ruby").empty?
             begin
                 ruby = i.at_xpath("./ruby/rubyBase").text
@@ -68,6 +76,9 @@ def convertFile (f, tocDict, dict)
         d.remove_attribute "rsidRDefault"
         d.remove_attribute "rsidP"
     end
+
+    doc.xpath("//commentRangeStart").remove; nil
+    doc.xpath("//commentRangeEnd").remove; nil
 
     #
     # <p> cannot have block elements as child
@@ -149,10 +160,14 @@ def convertFile (f, tocDict, dict)
     #
     doc.xpath("//span[@class='content'][rPr[highlight[@val='darkGray']]]").each {|r| r['class'] = "keyword"}
 
+    #
     # Any <span class=content> with highlight darkCyan are make <span class='kanji'>
+    #
     doc.xpath("//span[@class='content'][rPr[highlight[@val='darkCyan']]]").each {|r| r['class'] = "kanji"}
 
+    #
     # Any <span class=content> with highlight darkRed are make <span class='vi'>
+    #
     doc.xpath("//span[@class='content'][rPr[highlight[@val='darkRed']]]").each {|r|
         r['class'] = "vi"
         # r.name = "img"
@@ -161,13 +176,24 @@ def convertFile (f, tocDict, dict)
         # r['src'] = "vi.png"
     }
 
+    #
     # Any <span class=content> with highlight darkYellow are make <span class='en'>
+    #
     doc.xpath("//span[@class='content'][rPr[highlight[@val='darkYellow']]]").each {|r|
         r['class'] = "en"
         # r.name = "img"
         # r['data-en'] = r.content
         # r.content = ""
         # r['src'] = "en.png"
+    }
+
+    #
+    # commentReference will have class of the next element
+    #
+    doc.xpath("//span[@class='content'][commentReference]").each {|r|
+        puts "I am a comment being classed with '#{r.next_element['class']}'."
+        r['class'] = r.next_element['class']
+        r['comment'] = "true"
     }
 
     mergeAdjiacent doc, "border"
@@ -448,7 +474,7 @@ tocDict = []
 dict = {}
 
 convertFile "bunkei.ziten.aiueo.docx.xml",       tocDict, dict
-
+=begin
 convertFile "bunkei.ziten.kakikukeko.docx.xml",  tocDict, dict
 convertFile "bunkei.ziten.sashisuseso.docx.xml", tocDict, dict
 convertFile "bunkei.ziten.tachitsu.docx.xml",    tocDict, dict
@@ -459,7 +485,7 @@ convertFile "bunkei.ziten.ninuneno.docx.xml",    tocDict, dict
 convertFile "bunkei.ziten.hahifuheho.docx.xml",  tocDict, dict
 convertFile "bunkei.ziten.mamimumemo.docx.xml",  tocDict, dict
 convertFile "bunkei.ziten.last.docx.xml",        tocDict, dict
-
+=end
 version = Time.now.to_i
 dict['version'] = version
 
