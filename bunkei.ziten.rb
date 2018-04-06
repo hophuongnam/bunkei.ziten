@@ -465,7 +465,7 @@ $dict = {}
 $trans = {}
 
 convertFile "bunkei.ziten.aiueo.docx.xml"
-=begin
+
 convertFile "bunkei.ziten.kakikukeko.docx.xml"
 convertFile "bunkei.ziten.sashisuseso.docx.xml"
 convertFile "bunkei.ziten.tachitsu.docx.xml"
@@ -476,7 +476,7 @@ convertFile "bunkei.ziten.ninuneno.docx.xml"
 convertFile "bunkei.ziten.hahifuheho.docx.xml"
 convertFile "bunkei.ziten.mamimumemo.docx.xml"
 convertFile "bunkei.ziten.last.docx.xml"
-=end
+
 version = Time.now.to_i
 $dict['version'] = version
 
