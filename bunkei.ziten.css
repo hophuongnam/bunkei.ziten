@@ -242,6 +242,10 @@ input::placeholder {
     margin-left: 1em;
 }
 
+.item .keyword {
+    display: block;
+}
+
 .border {
     margin: 0 1em;
     right: 0;
@@ -371,10 +375,17 @@ input::placeholder {
     top:1px;
 }
 
-/* Style for translation */
-.trans {
+.trans { /* Style for translation, use with showModal() */
     font-size: 0.7em;
     line-height: 1.5;
+}
+
+.translation-off {
+    display: none;
+}
+
+.translation-on {
+    display: inline;
 }
 
 #stickyPanelContainer {

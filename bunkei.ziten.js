@@ -13,6 +13,7 @@ var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator
 var rebuildTOC = true;
 var toc;
 var dict;
+var trans; /* translation */
 var scrolling = false;
 var sitvff = "center"; /* scrollIntoView */
 var version;
@@ -21,8 +22,6 @@ var language;
 var minchoReady = false;
 var gothicReady = false;
 var textReady = false;
-var containerMonitor;
-// var monitorsTOC = [];
 var timeChecked;
 
 var touch = 'ontouchstart' in document.documentElement
@@ -68,33 +67,10 @@ function displayTOC(tocToDisplay) {
 
         var tocA = ""
         jQuery.each(tocToDisplay, function(index, value) {
-        	tocA += `<a id=${value.id}>${value.keyword}</a>`;
-            /*if (value.type == "kana") {
-                tocA += `<a id=${value.id}>${value.keyword}</a>`
-            } else {
-                tocA += `<a class=tocKanji id=${value.id}>${value.keyword}</a>`
-            }*/
+            tocA += `<a id=${value.id}>${value.keyword}</a>`;
         })        
         $('#toc').html("");
-        $("#toc").append(tocA);        
-
-        /*monitorsTOC.forEach(function(element) {
-            element.destroy();
-        });
-        monitorsTOC = [];
-
-        $("#toc a").each(function(i) {
-            var watcher = containerMonitor.create( $(this), 100 );
-            
-            watcher.enterViewport(function() {
-                $(watcher.watchItem).css("visibility", "visible");
-            });
-            watcher.exitViewport(function() {
-                $(watcher.watchItem).css("visibility", "hidden");
-            });
-
-            monitorsTOC.push(watcher);
-        });*/
+        $("#toc").append(tocA);
     }
 }
 
@@ -127,19 +103,13 @@ function doneTyping() {
 }
 
 function hideRT(rt) {
-    /*rt.css('color', 'transparent');*/
     rt.css('visibility', 'hidden');
 }
 
-/*
-α = <ruby>
-γ = <rt>
-δ = </rt></ruby>
-*/
 function updateMainContent(item) {
     $('#mainContent').html("");
-    var newContent = dict[item].replace(/＄/g, '<br>').replace(/\$/g, '<br>').replace(/θβ/g, "").replace(/μλ/g, "").replace(/β/g, '<str>').replace(/θ/g, '</str>');
-    // var pt = /＃.+?＆/g;
+
+    var newContent = dict[item];
     var pt = /λ.+?μ/g;
     var match;
 
@@ -269,18 +239,13 @@ function dataReady() {
         document.body.appendChild(sheet);
     }
 
-    // containerMonitor = scrollMonitor.createContainer( $("#toc") );
-
     language = store.get("language", "jp");
     switch(language) {
         case "jp":
             $("#langJP").prop("checked", true);
-            $("<style id=cssJP type='text/css'>.vi,.en{display:none !important;}</style>").appendTo("head");
-            $("#language").html("<span style='font-family:monospace;'>JP</span>");
             break;
         case "vi":
             $("#langVI").prop("checked", true);
-            $("<style id=cssVI type='text/css'>.vi{display:inline;}.en{display:none !important;}</style>").appendTo("head");
             $("#language").html("<span style='font-family:monospace;'>VI</span>");
             break;
     }
@@ -363,15 +328,14 @@ function dataReady() {
     $("#langBar input[type='radio']").on('change', function() {
         var selectedValue = $("input[name='rr']:checked").val();
         if (selectedValue && selectedValue == "jp") {
-           $("#cssVI").remove();
-           $("<style id=cssJP type='text/css'>.vi,.en{display:none !important;}</style>").appendTo("head");
-           $("#language").html("<span style='font-family:monospace;'>JP</span>");
+            $("#language").html("<span style='font-family:monospace;'>JP</span>");
+            $(".translation").removeClass("translation-on").addClass("translation-off");
         }
 
         if (selectedValue && selectedValue == "vi") {
-            $("#cssJP").remove();
-            $("<style id=cssVI type='text/css'>.vi{display:inline;}.en{display:none !important;}</style>").appendTo("head");
             $("#language").html("<span style='font-family:monospace;'>VI</span>");
+            $(".translation").removeClass("translation-on").addClass("translation-off");
+            $(".vi").removeClass("translation-off").addClass("translation-on");
         }
         store.set("language", selectedValue);
         language = selectedValue;
@@ -399,7 +363,6 @@ function dataReady() {
         var str = $("div.heading span.keyword").text();
         var m = str.match(/[１２３４５]/);
         if (m) {
-            // str = str.replace(m, "<sub>" + m + "</sub>");
             str = str.replace(m, `<sub>${m}</sub>`);
             $("div.heading span.keyword").html(str);
         }
@@ -415,33 +378,6 @@ function dataReady() {
             });
             $("#titleSentinel").trigger("scrolling");
         }
-
-        // $(".heading").attr("id", "itemTitle");
-        // $("#itemTitle").before("<div id=itemTitleSentinel></div>");
-
-        /*var idBefore = guid();
-        var myID;
-        $(".border").each(function() {
-            myID = guid();
-            $(this).attr("id", myID);
-            $(this).before("<div class=sentinel data-id='" + idBefore + "'></div>");
-            idBefore = myID;
-        });
-
-        $(".sentinel").on('scrolling', function(event) {
-            var elemPos = $(this).offset().left;
-            if (elemPos > event.windowBoundRight) {
-                $( "#" + $(this).data('id') ).css("position", "initial");
-            }
-            if (elemPos < event.windowBoundRight) {
-                $( "#" + $(this).data('id') ).css("position", "sticky");
-            }
-        });
-
-        $(".sentinel").trigger({
-            type: "scrolling",
-            windowBoundRight: $(window).scrollLeft() + document.documentElement.clientWidth
-        });*/
 
         $("digit").each(function(i, e) {
             var fullWidth = $(e).text();
@@ -473,13 +409,19 @@ function dataReady() {
             });
         }
 
-        $(".vi").click(function() {
-            showModal( $(this).data("vi"), "trans" );
+        $(".vi").click(function() {            
+            showModal( trans[ $(this).data("vi") ].vi, "trans" );
         });
 
-        $(".en").click(function() {
-            showModal( $(this).data("en"), "trans" );
-        });
+        switch(language) {
+            case "jp":
+                $(".translation").removeClass("translation-on").addClass("translation-off");
+                break;
+            case "vi":
+                $(".translation").removeClass("translation-on").addClass("translation-off");
+                $(".vi").removeClass("translation-off").addClass("translation-on");
+                break;
+        }
 
         $("#spinnerContainer").hide();
         $("#mainContent").css("visibility", "visible");
@@ -502,11 +444,6 @@ function dataReady() {
             if (isAndroid && isChrome) {
                 $("#titleSentinel").trigger("scrolling");
             }
-
-            /*$(".sentinel").trigger({
-                type: "scrolling",
-                windowBoundRight: $(window).scrollLeft() + document.documentElement.clientWidth
-            });*/
         }
     }, 100);
 
@@ -520,7 +457,7 @@ function dataReady() {
         $.getScript('bunkei.ziten.version.js', function() {
             timeChecked = new Date().toLocaleString();
             if (version != dict.version) {
-                Promise.all([getData('toc.json', false), getData('dict.json', false)]).then(
+                Promise.all([getData('toc.json', false), getData('dict.json', false), getData('trans.json', false)]).then(
                     (values) => {
                         toc  = values[0];
                         dict = values[1];
@@ -536,12 +473,14 @@ function dataReady() {
         delayed.delay(function() {
             timeChecked = new Date().toLocaleString();
             if (version != dict.version) {
-                Promise.all([getData('toc.json', false), getData('dict.json', false)]).then(
+                Promise.all([getData('toc.json', false), getData('dict.json', false), getData('trans.json', false)]).then(
                     (values) => {
-                        toc  = values[0];
-                        dict = values[1];
+                        toc   = values[0];
+                        dict  = values[1];
+                        trans = values[2];
                         updateMainContent(currentHeading);
                         $(window).scrollLeft(store.get('scroll'));
+                        rebuildTOC = true;
                     }
                 );
             }
@@ -554,10 +493,11 @@ $( document ).ready(() => {
         $("body").css("padding-bottom", "1.5em");
     }
 
-    Promise.all([getData('toc.json', true), getData('dict.json', true)]).then(
+    Promise.all([getData('toc.json', true), getData('dict.json', true), getData('trans.json', true)]).then(
         (values) => {
-            toc  = values[0];
-            dict = values[1];
+            toc   = values[0];
+            dict  = values[1];
+            trans = values[2];
             textReady = true;
             dataReady();
         }
@@ -577,7 +517,6 @@ $( document ).ready(() => {
                             getData('mincho.json', true).then(
                                 function(value) {
                                     var sheetMincho = document.createElement('style');
-                                    // sheetMincho.innerHTML = "@font-face{font-family:CustomMincho;src:url(data:font/ttf;base64," + value.mincho + ")}";
                                     sheetMincho.innerHTML = `@font-face{font-family:CustomMincho;src:url(data:font/ttf;base64,${value.mincho})}`;
                                     document.body.appendChild(sheetMincho);
                                     fontLoader = new FontLoader(["CustomMincho"], {
@@ -616,7 +555,6 @@ $( document ).ready(() => {
                             getData('gothic.json', true).then(
                                 function(value) {
                                     var sheetGothic = document.createElement('style');
-                                    // sheetGothic.innerHTML = "@font-face{font-family:CustomGothic;src:url(data:font/ttf;base64," + value.gothic + ")}";
                                     sheetGothic.innerHTML = `@font-face{font-family:CustomGothic;src:url(data:font/ttf;base64,${value.gothic})}`;
                                     document.body.appendChild(sheetGothic);
                                     fontLoader = new FontLoader(["CustomGothic"], {
@@ -661,6 +599,7 @@ $( document ).ready(() => {
                 caches.open(cacheName).then((cache) => {
                     cache.delete('toc.json');
                     cache.delete('dict.json');
+                    cache.delete('trans.json');
                     cache.delete('mincho.json');
                     cache.delete('gothic.json');
                     $("#spinnerContainer").hide();
