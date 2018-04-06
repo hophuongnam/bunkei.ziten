@@ -66,9 +66,9 @@ def convertFile (f)
 
     #
     # Build translation database
-    # use 'heading' styles instead of 'highlight' because 'heading' will affect whole paragraph
-    # 'Heading2' => Vietnamese
-    # 'Heading3' => English
+    # Using Words custom styles
+    # 'Vietnamese' => Vietnamese
+    # 'English' => English
     #
     commentsFile = "#{f.chomp("xml")}comments.xml"
     commentsHash = {}
@@ -85,13 +85,13 @@ def convertFile (f)
             commmentsContentVI = ''
             commmentsContentEN = ''
 
-            c.xpath("./p[pPr[pStyle[@val='Heading2']]]").each {|p|
+            c.xpath("./p[pPr[pStyle[@val='Vietnamese']]]").each {|p|
                 commmentsContentVI += "<div>#{p.content}</div>"
                 commmentsContentVI.gsub!("'", "&#39;")
                 commmentsContentVI.gsub!('"', "&#34;")
             }
 
-            c.xpath("./p[pPr[pStyle[@val='Heading3']]]").each {|p|
+            c.xpath("./p[pPr[pStyle[@val='English']]]").each {|p|
                 commmentsContentEN += "<div>#{p.content}</div>"
                 commmentsContentEN.gsub!("'", "&#39;")
                 commmentsContentEN.gsub!('"', "&#34;")
