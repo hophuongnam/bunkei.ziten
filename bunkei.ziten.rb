@@ -11,7 +11,6 @@ def mergeAdjiacent (doc, clName, linebreak)
     # γ = <rt>
     # δ = </rt></ruby>
     # <ruby> KANJI <rt> KANA </rt></ruby>
-    # β θ = thick underline
     # λ μ = dotted underline
     # ξ π = comment (translation)
 
@@ -41,11 +40,10 @@ def mergeAdjiacent (doc, clName, linebreak)
                 puts i
             end
         else
-            if i.xpath("./rPr[u[@val='thick']]").empty? and i.xpath("./rPr[u[@val='dotted']]").empty?
+            if i.xpath("./rPr[u[@val='dotted']]").empty?
                 content += i.content
             else
-                content += "β#{i.content}θ" unless i.xpath("./rPr[u[@val='thick']]").empty?
-                content += "λ#{i.content}μ" unless i.xpath("./rPr[u[@val='dotted']]").empty?                
+                content += "λ#{i.content}μ"
             end
         end
 
@@ -432,6 +430,10 @@ def convertFile (f)
     # α = <ruby>
     # γ = <rt>
     # δ = </rt></ruby>
+    # <ruby> KANJI <rt> KANA </rt></ruby>
+    # β θ = thick underline
+    # λ μ = dotted underline
+    # ξ π = comment (translation)
     #    
     itemSet = []
     attrID = ""
@@ -450,6 +452,8 @@ def convertFile (f)
             content.gsub! 'α', '<ruby>'
             content.gsub! 'γ', '<rt>'
             content.gsub! 'δ', '</rt></ruby>'
+
+            content.gsub! 'μλ', ""
 
             content.gsub! '＄', '<br>'
 
