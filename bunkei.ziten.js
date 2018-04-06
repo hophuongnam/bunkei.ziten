@@ -39,6 +39,18 @@ function getUrlVars() {
     return vars;
 }
 
+function getUrlParam(parameter, defaultvalue){
+    var urlparameter = defaultvalue;
+    if(window.location.href.indexOf(parameter) > -1){
+        urlparameter = getUrlVars()[parameter];
+        }
+    return urlparameter;
+}
+
+// https://vhostvn.bot.nu/bunkei.ziten.html?text=test
+// getUrlParam("text") => "test"
+// getUrlParam("wtf") => undefined
+
 /* Fake GUID */
 function guid() {
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
@@ -293,13 +305,27 @@ function dataReady() {
         $('#history-forward').data("disabled", 0);
     });
 
-    currentHeading = store.get('currentHeading');
-    if ( !currentHeading ) {
-        ran = pickRandomProperty(dict);
-        displayNewContent(ran);
+    $("#permalink").click(() => {
+        showModal( `https://mefat.review/bunkei.ziten.html?item=${currentHeading}`, "trans" );
+    });
+
+    var urlHeading = getUrlParam("item");
+    if (urlHeading) {
+        if (dict[urlHeading]) {
+            displayNewContent(urlHeading);
+        } else {
+            alert("Cannot find the grammar point. Please check the link!");
+        }
+        
     } else {
-        updateMainContent(currentHeading);
-        $(window).scrollLeft(store.get('scroll'));
+        currentHeading = store.get('currentHeading');
+        if ( !currentHeading ) {
+            ran = pickRandomProperty(dict);
+            displayNewContent(ran);
+        } else {
+            updateMainContent(currentHeading);
+            $(window).scrollLeft(store.get('scroll'));
+        }
     }
 
     $("#pullout").click(() => {
