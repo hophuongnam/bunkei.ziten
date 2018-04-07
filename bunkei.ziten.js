@@ -628,10 +628,7 @@ $( document ).ready(() => {
                     cache.delete('trans.json');
                     cache.delete('mincho.json');
                     cache.delete('gothic.json');
-                    $("#spinnerContainer").hide();
-                    $("#spinnerContainer").css("top", "51px");
-                    $("#spinnerContainer").css("z-index", "2");
-                    $("#mainContent").css("visibility", "visible");
+                    alert("Something wrong. Please reload!");
                 });
             }
         }
