@@ -22,8 +22,8 @@ def mergeAdjiacent (doc, clName, linebreak)
             i.content = "$#{i.content}"
         end
 
-        unless i.xpath("./commentReference").empty?
-            i.content = "ξ#{i.at_xpath('./commentReference')['id']}π"
+        if i['comment'] == 'yes' then
+        	i.content = "ξ#{i['id']}π"
         end
 
         unless i.xpath("./ruby").empty?
@@ -86,15 +86,11 @@ def convertFile (f)
             commmentsContentEN = ''
 
             c.xpath("./p[pPr[pStyle[@val='Vietnamese']]]").each {|p|
-                commmentsContentVI += "<div>#{p.content}</div>"
-                commmentsContentVI.gsub!("'", "&#39;")
-                commmentsContentVI.gsub!('"', "&#34;")
+                commmentsContentVI += "<div>#{p.content.gsub("'", "&#39;").gsub('"', "&#34;")}</div>"
             }
 
             c.xpath("./p[pPr[pStyle[@val='English']]]").each {|p|
-                commmentsContentEN += "<div>#{p.content}</div>"
-                commmentsContentEN.gsub!("'", "&#39;")
-                commmentsContentEN.gsub!('"', "&#34;")
+                commmentsContentEN += "<div>#{p.content.gsub("'", "&#39;").gsub('"', "&#34;")}</div>"
             }
 
             h['vi'] = commmentsContentVI unless commmentsContentVI.empty?
@@ -119,8 +115,14 @@ def convertFile (f)
         d.remove_attribute "rsidP"
     end
 
-    doc.xpath("//commentRangeStart").remove
+    # doc.xpath("//commentRangeStart").remove
     doc.xpath("//commentRangeEnd").remove
+    doc.xpath("//r[commentReference]").remove
+
+    doc.xpath("//commentRangeStart").each do |r|
+    	r.name = 'r'
+    	r['comment'] = 'yes'
+    end
 
     #
     # Mark all linebreak
@@ -201,11 +203,15 @@ def convertFile (f)
     doc.xpath("//span[@class='content'][rPr[highlight[@val='darkCyan']]]").each {|r| r['class'] = "kanji"}
 
     #
-    # Make commentReference element's class the same as the next element's class
+    # Make commentRangeStart element's class the same as the next element's class
     #
-    doc.xpath("//span[@class='content'][commentReference]").each {|r|
-        r['class'] = r.next_element['class']
+    doc.xpath("//span[@class='content'][@comment='yes']").each {|r|
+    	r['class'] = r.next_element['class']
+    	r.next_element.next = r.dup
+    	r.remove
     }
+
+    # File.open("test.xml", "w") {|f| f.write doc.to_xml}
 
     mergeAdjiacent doc, "examples" , false
     mergeAdjiacent doc, "right"    , false
@@ -469,7 +475,7 @@ $dict = {}
 $trans = {}
 
 convertFile "bunkei.ziten.aiueo.docx.xml"
-
+# =begin
 convertFile "bunkei.ziten.kakikukeko.docx.xml"
 convertFile "bunkei.ziten.sashisuseso.docx.xml"
 convertFile "bunkei.ziten.tachitsu.docx.xml"
@@ -480,7 +486,7 @@ convertFile "bunkei.ziten.ninuneno.docx.xml"
 convertFile "bunkei.ziten.hahifuheho.docx.xml"
 convertFile "bunkei.ziten.mamimumemo.docx.xml"
 convertFile "bunkei.ziten.last.docx.xml"
-
+# =end
 version = Time.now.to_i
 $dict['version'] = version
 
