@@ -115,10 +115,21 @@ def convertFile (f)
         d.remove_attribute "rsidP"
     end
 
-    # doc.xpath("//commentRangeStart").remove
     doc.xpath("//commentRangeEnd").remove
     doc.xpath("//r[commentReference]").remove
 
+    #
+    # Sometime this element is direct child of body.
+    # Make it the behind the first 'r' of the next 'p'
+    #
+    doc.xpath("/document/body/commentRangeStart").each do |c|
+        c.next_element.at_xpath("./r").next = c.dup
+        c.remove
+    end
+
+    #
+    # Make 'commentRangeStart' into 'r', and mark it
+    #
     doc.xpath("//commentRangeStart").each do |r|
     	r.name = 'r'
     	r['comment'] = 'yes'
