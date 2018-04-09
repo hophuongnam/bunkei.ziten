@@ -425,6 +425,23 @@ def convertFile (f)
             s.remove
         end
     end
+
+    doc.xpath("//*[@class='kanji']").each do |s|
+        s.content.scan(/ξ.+π/) do |m|
+            commentID = m[1 .. -2]
+            uuid = commentsHash[commentID]
+            newContent = s.content.gsub m, ""
+            imgVI = ""
+            imgEN = ""
+
+            s.previous = "<span class=kanji>#{newContent}</span>"
+            if $trans.has_key? uuid
+                s.previous = "<img class='vi translation translation-off' src=#{commentSVG} data-vi=#{uuid}>" if $trans[uuid].has_key? 'vi'
+                s.previous = "<img class='en translation translation-off' src=#{commentSVG} data-en=#{uuid}>" if $trans[uuid].has_key? 'en'
+            end
+            s.remove
+        end
+    end
     
     #
     # Build TOC
