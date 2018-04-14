@@ -485,8 +485,9 @@ function dataReady() {
             if (version != dict.version) {
                 Promise.all([getData('toc.json', false), getData('dict.json', false), getData('trans.json', false)]).then(
                     (values) => {
-                        toc  = values[0];
-                        dict = values[1];
+                        toc   = values[0];
+                        dict  = values[1];
+                        trans = values[2];
                         updateMainContent(currentHeading);
                         $(window).scrollLeft(store.get('scroll'));
                     }
