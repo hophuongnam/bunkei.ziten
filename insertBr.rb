@@ -12,7 +12,8 @@ brBorder = %Q{
 <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     <w:rPr>
         <w:rFonts w:ascii="Tahoma" w:eastAsia="Yu Mincho" w:hAnsi="Tahoma" w:cs="Tahoma" />
-        <w:sz w:val="18" /><w:szCs w:val="18" />
+        <w:sz w:val="18" />
+        <w:szCs w:val="18" />
     </w:rPr>
     <w:br />
 </w:r>
@@ -32,7 +33,8 @@ brExplains = %Q{
 <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     <w:rPr>
         <w:rFonts w:ascii="Tahoma" w:eastAsia="Yu Mincho" w:hAnsi="Tahoma" w:cs="Tahoma" />
-        <w:sz w:val="18" /><w:szCs w:val="18" />
+        <w:sz w:val="18" />
+        <w:szCs w:val="18" />
         <w:highlight w:val="yellow" />
     </w:rPr>
     <w:br />
@@ -53,7 +55,8 @@ brWrong = %Q{
 <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     <w:rPr>
         <w:rFonts w:ascii="Tahoma" w:eastAsia="Yu Mincho" w:hAnsi="Tahoma" w:cs="Tahoma" />
-        <w:sz w:val="18" /><w:szCs w:val="18" />
+        <w:sz w:val="18" />
+        <w:szCs w:val="18" />
         <w:highlight w:val="cyan" />
     </w:rPr>
     <w:br />
@@ -74,7 +77,8 @@ brRight = %Q{
 <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     <w:rPr>
         <w:rFonts w:ascii="Tahoma" w:eastAsia="Yu Mincho" w:hAnsi="Tahoma" w:cs="Tahoma" />
-        <w:sz w:val="18" /><w:szCs w:val="18" />
+        <w:sz w:val="18" />
+        <w:szCs w:val="18" />
         <w:highlight w:val="magenta" />
     </w:rPr>
     <w:br />
@@ -95,7 +99,8 @@ brSamples = %Q{
 <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     <w:rPr>
         <w:rFonts w:ascii="Tahoma" w:eastAsia="Yu Mincho" w:hAnsi="Tahoma" w:cs="Tahoma" />
-        <w:sz w:val="18" /><w:szCs w:val="18" />
+        <w:sz w:val="18" />
+        <w:szCs w:val="18" />
         <w:highlight w:val="lightGray" />
     </w:rPr>
     <w:br />
@@ -116,7 +121,8 @@ brExamples = %Q{
 <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     <w:rPr>
         <w:rFonts w:ascii="Tahoma" w:eastAsia="Yu Mincho" w:hAnsi="Tahoma" w:cs="Tahoma" />
-        <w:sz w:val="18" /><w:szCs w:val="18" />
+        <w:sz w:val="18" />
+        <w:szCs w:val="18" />
         <w:highlight w:val="green" />
     </w:rPr>
     <w:br />
@@ -136,4 +142,4 @@ doc.xpath("//*[@class='examples']").each { |r|
 doc.xpath("//w:r", namespace).each {|r|
     r.remove_attribute "class"
 }
-File.open("test.out.xml", "w") {|f| f.write doc.to_xml}
+File.open(ARGV[0], "w") {|f| f.write doc.to_xml}
