@@ -11,7 +11,6 @@ doc.xpath("//w:r", namespace).each {|r|
 brBorder = %Q{
 <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     <w:rPr>
-        <w:rFonts w:ascii="Tahoma" w:eastAsia="Yu Mincho" w:hAnsi="Tahoma" w:cs="Tahoma" />
         <w:sz w:val="18" />
         <w:szCs w:val="18" />
     </w:rPr>
@@ -32,7 +31,6 @@ doc.xpath("//*[@class='border']").each { |r|
 brExplains = %Q{
 <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     <w:rPr>
-        <w:rFonts w:ascii="Tahoma" w:eastAsia="Yu Mincho" w:hAnsi="Tahoma" w:cs="Tahoma" />
         <w:sz w:val="18" />
         <w:szCs w:val="18" />
         <w:highlight w:val="yellow" />
@@ -54,7 +52,6 @@ doc.xpath("//*[@class='explains']").each { |r|
 brWrong = %Q{
 <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     <w:rPr>
-        <w:rFonts w:ascii="Tahoma" w:eastAsia="Yu Mincho" w:hAnsi="Tahoma" w:cs="Tahoma" />
         <w:sz w:val="18" />
         <w:szCs w:val="18" />
         <w:highlight w:val="cyan" />
@@ -76,7 +73,6 @@ doc.xpath("//*[@class='wrong']").each { |r|
 brRight = %Q{
 <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     <w:rPr>
-        <w:rFonts w:ascii="Tahoma" w:eastAsia="Yu Mincho" w:hAnsi="Tahoma" w:cs="Tahoma" />
         <w:sz w:val="18" />
         <w:szCs w:val="18" />
         <w:highlight w:val="magenta" />
@@ -98,7 +94,6 @@ doc.xpath("//*[@class='right']").each { |r|
 brSamples = %Q{
 <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     <w:rPr>
-        <w:rFonts w:ascii="Tahoma" w:eastAsia="Yu Mincho" w:hAnsi="Tahoma" w:cs="Tahoma" />
         <w:sz w:val="18" />
         <w:szCs w:val="18" />
         <w:highlight w:val="lightGray" />
@@ -120,7 +115,6 @@ doc.xpath("//*[@class='samples']").each { |r|
 brExamples = %Q{
 <w:r xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
     <w:rPr>
-        <w:rFonts w:ascii="Tahoma" w:eastAsia="Yu Mincho" w:hAnsi="Tahoma" w:cs="Tahoma" />
         <w:sz w:val="18" />
         <w:szCs w:val="18" />
         <w:highlight w:val="green" />
