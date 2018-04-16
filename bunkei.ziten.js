@@ -403,6 +403,7 @@ function dataReady() {
                 }
             });
             $("#titleSentinel").trigger("scrolling");
+            $(".heading").css("position", "initial");
         }
 
         $("digit").each(function(i, e) {
