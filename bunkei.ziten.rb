@@ -303,7 +303,7 @@ def convertFile (f)
         dummy = e.add_next_sibling "<dummy>"
         table = dummy[0].add_child "<div class=examples></div>"
         tableRow = table[0].add_child "<span class=sentence></span>"
-        sampleMark = tableRow[0].add_child "<span class=sentenceHeader style='white-space: nowrap;'></span>"
+        sampleMark = tableRow[0].add_child "<span class=sentenceHeader style='white-space: nowrap;'>誤</span>"
         sample     = tableRow[0].add_child "<span class=sentenceContent></span>"
         content = e.content
         content.chomp! "$"
