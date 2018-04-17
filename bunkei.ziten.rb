@@ -249,7 +249,7 @@ def convertFile (f)
                 sentence       = tableRow[0].add_child "<span class=sentenceContent></span>"
                 scN = m[0, 1]
                 m = m[1..-1]
-                sentenceNumber[0].content = "#{scN}　"
+                sentenceNumber[0].content = "#{scN}\u3000"
                 m.chomp! "$"
                 if /^\$/.match(m)
                 	m = m[1..-1]
@@ -269,7 +269,7 @@ def convertFile (f)
         dummy = e.add_next_sibling "<dummy>"
         table = dummy[0].add_child "<div class=examples></div>"
         tableRow = table[0].add_child "<span class=sentence></span>"
-        sampleMark = tableRow[0].add_child "<span class=sentenceHeader style='white-space: nowrap;'></span>"
+        sampleMark = tableRow[0].add_child "<span class=sentenceHeader style='white-space: nowrap;'>(例)\u3000</span>"
         sample     = tableRow[0].add_child "<span class=sentenceContent></span>"
         content = e.content
         content.chomp! "$"
@@ -286,7 +286,7 @@ def convertFile (f)
         dummy = e.add_next_sibling "<dummy>"
         table = dummy[0].add_child "<div class=examples></div>"
         tableRow = table[0].add_child "<span class=sentence></span>"
-        sampleMark = tableRow[0].add_child "<span class=sentenceHeader style='white-space: nowrap;'></span>"
+        sampleMark = tableRow[0].add_child "<span class=sentenceHeader style='white-space: nowrap;'>(正)\u3000</span>"
         sample     = tableRow[0].add_child "<span class=sentenceContent></span>"
         content = e.content
         content.chomp! "$"
@@ -303,7 +303,7 @@ def convertFile (f)
         dummy = e.add_next_sibling "<dummy>"
         table = dummy[0].add_child "<div class=examples></div>"
         tableRow = table[0].add_child "<span class=sentence></span>"
-        sampleMark = tableRow[0].add_child "<span class=sentenceHeader style='white-space: nowrap;'>誤</span>"
+        sampleMark = tableRow[0].add_child "<span class=sentenceHeader style='white-space: nowrap;'>(誤)\u3000</span>"
         sample     = tableRow[0].add_child "<span class=sentenceContent></span>"
         content = e.content
         content.chomp! "$"
