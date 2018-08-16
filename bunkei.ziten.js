@@ -14,7 +14,7 @@ var rebuildTOC = true;
 var toc;
 var dict;
 var trans; /* translation */
-var scrolling = false;
+// var scrolling = false;
 var sitvff = "center"; /* scrollIntoView */
 var version;
 var myID = guid();
@@ -80,7 +80,7 @@ function displayTOC(tocToDisplay) {
         var tocA = ""
         jQuery.each(tocToDisplay, function(index, value) {
             tocA += `<a id=${value.id}>${value.keyword}</a>`;
-        })        
+        })
         $('#toc').html("");
         $("#toc").append(tocA);
     }
@@ -135,7 +135,7 @@ function updateMainContent(item) {
             } else {
                 a = match[0].replace("λ", "").replace("μ", "");
             }
-            
+
         }
         newContent = newContent.replace(match[0], a);
     }
@@ -192,7 +192,7 @@ async function getData(filename, same) {
         if (!same) {
             await myCache.delete(filename);
         }
-        
+
         await myCache.match(filename)
         .then(
             (resp) => {
@@ -295,7 +295,7 @@ function dataReady() {
 
         displayNewContent( backward.pop() );
         closeSideBar();
-        forward.push( backward.pop() );        
+        forward.push( backward.pop() );
         store.set('history', backward);
         if (backward.length == 0) {
             $('#history-backward').css('color', '#ccc');
@@ -316,7 +316,7 @@ function dataReady() {
         } else {
             alert("Cannot find the grammar point. Please check the link!");
         }
-        
+
     } else {
         currentHeading = store.get('currentHeading');
         if ( !currentHeading ) {
@@ -393,7 +393,7 @@ function dataReady() {
             $("div.heading span.keyword").html(str);
         }
 
-        if (isAndroid && isChrome) {
+        /*if (isAndroid && isChrome) {
             $(".heading").after("<div id=titleSentinel></div>");
             $("#titleSentinel").on("scrolling", function() {
                 if ( $(this).offset().left > $(window).scrollLeft() + document.documentElement.clientWidth) {
@@ -404,7 +404,9 @@ function dataReady() {
             });
             $("#titleSentinel").trigger("scrolling");
             $(".heading").css("position", "initial");
-        }
+        }*/
+
+        $("#stickyPanel").text( $(".heading .keyword").text() );
 
         $("digit").each(function(i, e) {
             var fullWidth = $(e).text();
@@ -415,8 +417,6 @@ function dataReady() {
         if ( $(".heading .kanji").length > 0 ) {
             $(".heading .keyword").hide();
         }
-
-        $("#stickyPanel").text( $(".heading .keyword").text() );
 
         $('#mainContent a').click(function(e) {
             e.preventDefault();
@@ -436,7 +436,7 @@ function dataReady() {
             });
         }
 
-        $(".vi").click(function() {            
+        $(".vi").click(function() {
             showModal( trans[ $(this).data("vi") ].vi, "trans" );
         });
 
@@ -459,7 +459,7 @@ function dataReady() {
     $("#spinnerContainer").css("z-index", "2");
     $("#mainContent").css("visibility", "visible");
 
-    $(window).scroll(() => {
+    /*$(window).scroll(() => {
         scrolling = true;
     });
 
@@ -472,7 +472,7 @@ function dataReady() {
                 $("#titleSentinel").trigger("scrolling");
             }
         }
-    }, 100);
+    }, 100);*/
 
     setInterval(function() {
         if ( !$("#sideBar").hasClass("open") ) {
@@ -519,6 +519,14 @@ function dataReady() {
 $( document ).ready(() => {
     if (isAndroid && isChrome) {
         $("body").css("padding-bottom", "1.5em");
+
+        // fix Android Chrome menu a tag invisible when item is long (needed horizontal scroll)
+        $("#mainContent").css("position", "fixed");
+        $("#mainContent").css("overflow", "auto");
+        $("#mainContent").css("width", "100%");
+        $("#mainContent").css("padding-right", "1em");
+        $("body").css("padding-right", "unset");
+        $("#stickyPanelContainer").css("visibility", "visible");
     }
 
     Promise.all([getData('toc.json', true), getData('dict.json', true), getData('trans.json', true)]).then(
