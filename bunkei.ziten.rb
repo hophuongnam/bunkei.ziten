@@ -523,8 +523,8 @@ $dict['version'] = version
 #
 # Write to file
 #
-File.open("/Data/time4vps.html/bunkei.ziten.version.js", "w") {|f| f.write "version = #{version};"}
-File.open("/Data/time4vps.html/toc.json", "w") {|f| f.write $tocDict.to_json}
-File.open("/Data/time4vps.html/dict.json", "w") {|f| f.write $dict.to_json}
-File.open("/Data/time4vps.html/trans.json", "w") {|f| f.write $trans.to_json}
+File.open("/Data/hophuongnam.github.io/bunkei.ziten.version.js", "w") {|f| f.write "version = #{version};"}
+File.open("/Data/hophuongnam.github.io/toc.json", "w") {|f| f.write $tocDict.to_json}
+File.open("/Data/hophuongnam.github.io/dict.json", "w") {|f| f.write $dict.to_json}
+File.open("/Data/hophuongnam.github.io/trans.json", "w") {|f| f.write $trans.to_json}
 puts "Done!"

@@ -25,10 +25,10 @@ do
     sleep 5
 
 
-    # cp ../time4vps.html/* ../hophuongnam.github.io/ 
+    # cp ../time4vps.html/* ../hophuongnam.github.io/
 
 
-    rsync -av --delete --exclude=.* ../time4vps.html/ ../hophuongnam.github.io/
+    # rsync -av --delete --exclude=.* ../time4vps.html/ ../hophuongnam.github.io/
     cd ../hophuongnam.github.io
     git add --all
     git commit -m "$(date)"
